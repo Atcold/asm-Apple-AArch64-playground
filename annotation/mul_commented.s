@@ -3,14 +3,16 @@
     .globl    _main                                          ; Declare main as a global symbol
     .p2align    2                                            ; Align to 2^2 bytes (4-byte alignment)
 _main:                                                       ; Main function entry point
-    .cfi_startproc                                           ; Start of procedure for call frame info
+;    .cfi_startproc                                           ; Start of procedure for call frame info
 // ; %bb.0:                                                     ; Basic block 0
     sub    sp, sp, #64                                       ; Allocate 64 bytes on stack
+; x registers are 64-bit wide (full width of the architecture)
+; w registers are 32-bit wide (lower half of the corresponding x register)
     stp    x29, x30, [sp, #48]                               ; Store frame pointer (x29) and link register (x30) on stack
     add    x29, sp, #48                                      ; Set up new frame pointer
-    .cfi_def_cfa w29, 16                                     ; Define Call Frame Address
-    .cfi_offset w30, -8                                      ; Specify offset for saved registers
-    .cfi_offset w29, -16
+;    .cfi_def_cfa w29, 16                                     ; Define Call Frame Address
+;    .cfi_offset w30, -8                                      ; Specify offset for saved registers
+;    .cfi_offset w29, -16
     // mov    w8, #0                                            ; Set w8 to 0 (return value for main)
     // stur    w8, [x29, #-20]                                  ; Store w8 at frame pointer -20 (for later retrieval)
     // stur    wzr, [x29, #-4]                                  ; Store zero register at frame pointer -4 (unused variable)
@@ -40,8 +42,8 @@ _main:                                                       ; Main function ent
     ldp    x29, x30, [sp, #48]                               ; Restore frame pointer and link register
     add    sp, sp, #64                                       ; Deallocate stack space
     ret                                                      ; Return from main function
-    .cfi_endproc                                             ; End of procedure
-                                        
+;    .cfi_endproc                                             ; End of procedure
+
     .section    __TEXT,__cstring,cstring_literals            ; Define section for string literals
 l_.str:                                                      ; String format label
     .asciz    "Multiplying %d * %d = %d\n"                ; Null-terminated format string
