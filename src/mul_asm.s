@@ -9,56 +9,25 @@ _main:
     mul x26, x24, x25    ; x26 = x24 * x25
     
     ; Setup for conversion loop
-    mov x21, #10         ; Divisor for decimal conversion
     adrp x1, result@GOTPAGE    
     ldr x1, [x1, result@GOTPAGEOFF]
     
-    ; Convert three numbers (x24, x25, x26) to ASCII
-    mov x9, #0           ; Counter for which number we're converting
-convert_loop:
-    ; Select number to convert based on counter
-    cmp x9, #0
-    beq select_first
-    cmp x9, #1
-    beq select_second
-    mov x10, x26         ; Third number (result)
-    b convert_digits
+    ; Convert x24 and x25 to ASCII
+    add x24, x24, #'0'
+    add x25, x25, #'0'
 
-select_first:
-    mov x10, x24         ; First number
-    b convert_digits
-
-select_second:
-    mov x10, x25         ; Second number
-
-convert_digits:
-    ; Convert to ASCII
-    udiv x22, x10, x21        ; Get tens digit
-    msub x23, x22, x21, x10   ; Get ones digit
+    ; Convert x26 to ASCII
+    mov x10, #10
+    udiv x22, x26, x10        ; Get tens digit
+    msub x23, x22, x10, x26   ; Get ones digit
     add x22, x22, #'0'        ; Convert tens to ASCII
     add x23, x23, #'0'        ; Convert ones to ASCII
-    
-    ; Store at correct position
-    cmp x9, #0
-    beq store_first
-    cmp x9, #1
-    beq store_second
-    b store_result
-    
-store_first:
-    strb w23, [x1]       ; Store at position 0
-    b continue
-store_second:
-    strb w23, [x1, #4]   ; Store at position 4
-    b continue
-store_result:
+
+    ; Store x24, x25, and x22, x23
+    strb w24, [x1]       ; Store at position 0
+    strb w25, [x1, #4]   ; Store at position 4
     strb w22, [x1, #8]   ; Store at position 8,9
     strb w23, [x1, #9]
-    
-continue:
-    add x9, x9, #1       ; Increment counter
-    cmp x9, #3           ; Check if we've done all three numbers
-    b.lt convert_loop
 
     ; Write result to stdout
     mov x0, #1           ; File descriptor: stdout
