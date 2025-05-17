@@ -1,6 +1,6 @@
 # Apple AArch64 playground
 
-A collection of minimal assembly programs for macOS on Apple Silicon (AArch64).  
+A collection of minimal assembly programs for macOS on Apple Silicon (AArch64).
 This repository is meant for experimentation, learning, and low-level exploration of the Apple ARM64 architecture.
 
 
@@ -55,3 +55,4 @@ clang -arch x86_64 -o hello_x86_64 hello_x86_64.s
 ## 📚 References
 
 - [Apple ARM64 ABI Documentation](https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms)
+- [ARMv8 AArch64/ARM64 Full Beginner's Assembly Tutorial](https://mariokartwii.com/armv8/)
